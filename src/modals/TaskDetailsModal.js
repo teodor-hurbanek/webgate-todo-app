@@ -5,16 +5,16 @@ import { useData } from '../hooks/useData'
 // components
 import { Badge, Flex, Text, Title, Checkbox, Space, Box, Button } from '@mantine/core'
 // functions
-import { getPriorityColor, getFormattedDeadline } from '../helpers/formatters'
+import { getPriorityColor, getFormattedDeadline, getExpired } from '../utils/helpers'
 
 export default function TaskDetailsModal({ context, id }) {
   const { tasks } = useData()
-  const { updateTask, deleteTask } = useData()
-  const taskId = context.modals[0].props.taskId
+  const { taskId, updateTask, deleteTask } = useData()
 
   const task = tasks.find(task => task.id === taskId)
   const { title, description, deadline, priority, isCompleted } = task
   const [checked, setChecked] = useState(isCompleted)
+  const isExpired = getExpired(deadline, isCompleted)
 
   const handleUpdateTask = () => {
     setChecked(checked => !checked)
@@ -42,13 +42,13 @@ export default function TaskDetailsModal({ context, id }) {
       onConfirm: () => handleDeleteTask(id),
     })
 
-  // TODO: Fix - Cannot read properties of undefined (reading 'props') = (context.modals[0].props.taskId)
-
   return (
     <>
       <Flex align={'center'} gap={'sm'} sx={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: '1000' }}>
         <Badge h={'.5rem'} w={'2rem'} variant="filled" radius="xl" color={getPriorityColor(priority)} />
-        <Text size="sm">{getFormattedDeadline(deadline)}</Text>
+        <Text color={isExpired ? 'red' : null} size="sm">
+          {getFormattedDeadline(deadline)}
+        </Text>
       </Flex>
       <Title order={4}>{title}</Title>
       <Text mih={'10rem'} size="sm">

@@ -17,15 +17,10 @@ const NewTaskModal = ({ context, id }) => {
 
     validate: {
       title: value => (value.length < 2 ? 'Title must have at least 2 letters' : null),
-      description: value => (value.length > 150 ? 'Description cannot have more than 150 characters' : null),
+      description: value => (value.length > 280 ? 'Description cannot have more than 280 characters' : null),
       deadline: value => (value.length === 0 ? 'Deadline is required' : null),
     },
   })
-
-  // const handleResizeForm = () => {
-  //   const formElement = document.getElementById('task-form')
-  //   formElement.style.height = '35rem'
-  // }
 
   const handleSubmit = () => {
     createTask(form.values)
@@ -47,7 +42,6 @@ const NewTaskModal = ({ context, id }) => {
         minDate={new Date()}
         valueFormat="DD MMM YYYY hh:mm"
         sx={{ position: 'relative', zIndex: '1000' }}
-        // onClick={handleResizeForm}
         {...form.getInputProps('deadline')}
       />
       <Space h="md" />

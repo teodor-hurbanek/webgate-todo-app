@@ -5,16 +5,26 @@ import { useData } from '../hooks/useData'
 // components
 import { Grid, Card, Flex, Box, Badge, Title, Text, Checkbox, CloseButton, Button } from '@mantine/core'
 // functions
-import { getPriorityColor, getFormattedTitle, getFormattedDeadline } from '../helpers/formatters'
+import { getPriorityColor, getFormattedTitle, getFormattedDeadline, getExpired } from '../utils/helpers'
 
 export default function TodoCard({ item }) {
   const { id, title, priority, isCompleted, deadline } = item
   const [checked, setChecked] = useState(isCompleted)
-  const { updateTask, deleteTask } = useData()
+  const { setTaskId, updateTask, deleteTask } = useData()
+  const isExpired = getExpired(deadline, isCompleted)
 
   const handleUpdateTask = () => {
     setChecked(checked => !checked)
     updateTask(id, !checked)
+  }
+
+  const openTaskDetailsModal = () => {
+    setTaskId(id)
+    modals.openContextModal({
+      modal: 'taskDetailsModal',
+      centered: true,
+      sx: { section: { position: 'relative' } },
+    })
   }
 
   const openDeleteModal = id =>
@@ -35,7 +45,13 @@ export default function TodoCard({ item }) {
 
   return (
     <Grid.Col xs={6} md={4}>
-      <Card shadow="sm" padding="lg" radius="md" withBorder sx={{ cursor: 'pointer' }}>
+      <Card
+        shadow="sm"
+        padding="lg"
+        radius="md"
+        withBorder
+        sx={isExpired ? { border: '1px solid red !important' } : null}
+      >
         {priority && (
           <Badge
             h={'.5rem'}
@@ -52,20 +68,8 @@ export default function TodoCard({ item }) {
           <Flex align={'center'} justify={'space-between'} w={'100%'}>
             <Box>
               <Title order={5}>{getFormattedTitle(title, 25)}</Title>
-              <Text>{getFormattedDeadline(deadline)}</Text>
-              <Button
-                variant="subtle"
-                onClick={
-                  () =>
-                    modals.openContextModal({
-                      modal: 'taskDetailsModal',
-                      centered: true,
-                      sx: { section: { position: 'relative' } },
-                      taskId: id,
-                    })
-                  // TODO: Fix - Warning: React does not recognize the `taskId` prop on a DOM element.
-                }
-              >
+              <Text color={isExpired ? 'red' : null}>{getFormattedDeadline(deadline)}</Text>
+              <Button variant="subtle" onClick={openTaskDetailsModal}>
                 Open task details
               </Button>
             </Box>

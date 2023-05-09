@@ -11,6 +11,7 @@ const DataContext = createContext({
 
 export const useProvidedData = () => {
   const [tasks, setTasks] = useState(data)
+  const [taskId, setTaskId] = useState(0)
 
   const createTask = data => {
     const lastId = tasks.length ? Number([...tasks].pop()?.id) + 1 : '1'
@@ -32,7 +33,7 @@ export const useProvidedData = () => {
     const newTasks = tasks.filter(task => task.id !== id)
     setTasks(newTasks)
   }
-  return { tasks, createTask, updateTask, deleteTask }
+  return { tasks, taskId, setTaskId, createTask, updateTask, deleteTask }
 }
 
 export const useData = () => useContext(DataContext)

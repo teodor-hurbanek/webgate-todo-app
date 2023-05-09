@@ -14,3 +14,5 @@ export const getFormattedTitle = (title, count) => {
 export const getFormattedDeadline = deadline => {
   return moment(deadline).format('DD MMM YYYY hh:mm')
 }
+
+export const getExpired = (date, completed) => new Date(date) < new Date() && !completed
