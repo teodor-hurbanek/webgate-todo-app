@@ -12,22 +12,23 @@ export default function TaskDetailsModal({ context, id }: ContextModalProps) {
   const { tasks, taskId, updateTask, deleteTask } = useData()
 
   const task = tasks.find(task => task.id === taskId)
+  // TODO: remove ! and provide better typing
   const { title, description, deadline, priority, isCompleted } = task!
   const [checked, setChecked] = useState(isCompleted)
   const isExpired = getExpired(deadline, isCompleted)
 
   const handleUpdateTask = () => {
-    setChecked((checked: boolean | undefined) => !checked)
+    setChecked((checked: boolean) => !checked)
     const id = taskId
     updateTask(id, !checked)
   }
 
-  const handleDeleteTask = (id: number | undefined) => {
+  const handleDeleteTask = (id: number) => {
     deleteTask(id)
     modals.closeAll()
   }
 
-  const openDeleteModal = (id: number | undefined) =>
+  const openDeleteModal = (id: number) =>
     modals.openConfirmModal({
       title: 'Delete this task',
       centered: true,

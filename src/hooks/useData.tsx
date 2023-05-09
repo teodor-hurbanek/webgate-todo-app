@@ -2,16 +2,16 @@ import React, { Dispatch, ReactNode, SetStateAction, createContext, useContext, 
 // data
 import data from '../data'
 // types
-import { Data } from '../types/general'
+import { Data, NewData } from '../types/general'
 
 interface DataInterface {
   tasks: Data[]
-  taskId: number | undefined
+  taskId: number
   setTasks: Dispatch<SetStateAction<Data[]>>
-  setTaskId: Dispatch<SetStateAction<number | undefined>>
-  createTask: (data: Data) => void
-  updateTask: (id: number | undefined, isCompleted: boolean) => void
-  deleteTask: (id: number | undefined) => void
+  setTaskId: Dispatch<SetStateAction<number>>
+  createTask: (data: NewData) => void
+  updateTask: (id: number, isCompleted: boolean) => void
+  deleteTask: (id: number) => void
 }
 
 const DataContext = createContext<DataInterface>({
@@ -19,22 +19,22 @@ const DataContext = createContext<DataInterface>({
   taskId: 0,
   setTasks: () => null,
   setTaskId: () => null,
-  createTask: (data: Data) => null,
-  updateTask: (id: number | undefined, isCompleted: boolean) => null,
-  deleteTask: (id: number | undefined) => null,
+  createTask: (data: NewData) => null,
+  updateTask: (id: number, isCompleted: boolean) => null,
+  deleteTask: (id: number) => null,
 })
 
 export const useProvidedData = (): DataInterface => {
   const [tasks, setTasks] = useState<Data[]>(data)
-  const [taskId, setTaskId] = useState<number | undefined>(0)
+  const [taskId, setTaskId] = useState<number>(0)
 
-  const createTask = (data: Data) => {
+  const createTask = (data: NewData) => {
     const lastId = tasks.length ? Number([...tasks].pop()?.id) + 1 : 1
     const newObj = { id: lastId, ...data, isCompleted: false }
     setTasks([...tasks, newObj])
   }
 
-  const updateTask = (id: number | undefined, isCompleted: boolean) => {
+  const updateTask = (id: number, isCompleted: boolean) => {
     const newTasks = tasks.map(task => {
       if (task.id === id) {
         task.isCompleted = isCompleted
@@ -44,7 +44,7 @@ export const useProvidedData = (): DataInterface => {
     setTasks(newTasks)
   }
 
-  const deleteTask = (id: number | undefined) => {
+  const deleteTask = (id: number) => {
     const newTasks = tasks.filter(task => task.id !== id)
     setTasks(newTasks)
   }

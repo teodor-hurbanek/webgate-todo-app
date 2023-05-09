@@ -4,27 +4,28 @@ import { modals } from '@mantine/modals'
 import { useState } from 'react'
 import { useData } from '../hooks/useData'
 // components
-import { Grid, Card, Flex, Box, Badge, Title, Text, Checkbox, CloseButton, Button } from '@mantine/core'
+import { Grid, Card, Flex, Box, Badge, Title, Text, Checkbox, CloseButton, Button, Center, Space } from '@mantine/core'
 // functions
 import { getPriorityColor, getFormattedTitle, getFormattedDeadline, getExpired } from '../utils/helpers'
 // types
 import { Data } from '../types/general'
 
-type TodoCardProps = {
+type TaskCardProps = {
   item: Data
 }
 
-export default function TodoCard({ item }: TodoCardProps) {
+export default function TaskCard({ item }: TaskCardProps) {
   const { id, title, priority, isCompleted, deadline } = item
   const [checked, setChecked] = useState(isCompleted)
   const { setTaskId, updateTask, deleteTask } = useData()
   const isExpired = getExpired(deadline, isCompleted)
 
   const handleUpdateTask = () => {
-    setChecked((checked: boolean | undefined) => !checked)
+    setChecked((checked: boolean) => !checked)
     updateTask(id, !checked)
   }
 
+  // TODO: try to open with onCardClick instead of the buttun
   const openTaskDetailsModal = () => {
     setTaskId(id)
     modals.openContextModal({
@@ -35,7 +36,7 @@ export default function TodoCard({ item }: TodoCardProps) {
     })
   }
 
-  const openDeleteModal = (id: number | undefined) =>
+  const openDeleteModal = (id: number) =>
     modals.openConfirmModal({
       title: 'Delete this task',
       centered: true,
@@ -77,14 +78,17 @@ export default function TodoCard({ item }: TodoCardProps) {
             <Box>
               <Title order={5}>{getFormattedTitle(title, 25)}</Title>
               <Text color={isExpired ? 'red' : undefined}>{getFormattedDeadline(deadline)}</Text>
-              <Button variant="subtle" onClick={openTaskDetailsModal}>
-                Open task details
-              </Button>
             </Box>
 
             <CloseButton onClick={() => openDeleteModal(id)} title="Delete task card" size="md" iconSize={20} />
           </Flex>
         </Flex>
+        <Space h="sm" />
+        <Center>
+          <Button onClick={openTaskDetailsModal} variant="light">
+            Open task details
+          </Button>
+        </Center>
       </Card>
     </Grid.Col>
   )
