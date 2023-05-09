@@ -1,4 +1,5 @@
-import { modals } from '@mantine/modals'
+import React from 'react'
+import { ContextModalProps, modals } from '@mantine/modals'
 //hooks
 import { useState } from 'react'
 import { useData } from '../hooks/useData'
@@ -7,27 +8,26 @@ import { Badge, Flex, Text, Title, Checkbox, Space, Box, Button } from '@mantine
 // functions
 import { getPriorityColor, getFormattedDeadline, getExpired } from '../utils/helpers'
 
-export default function TaskDetailsModal({ context, id }) {
-  const { tasks } = useData()
-  const { taskId, updateTask, deleteTask } = useData()
+export default function TaskDetailsModal({ context, id }: ContextModalProps) {
+  const { tasks, taskId, updateTask, deleteTask } = useData()
 
   const task = tasks.find(task => task.id === taskId)
-  const { title, description, deadline, priority, isCompleted } = task
+  const { title, description, deadline, priority, isCompleted } = task!
   const [checked, setChecked] = useState(isCompleted)
   const isExpired = getExpired(deadline, isCompleted)
 
   const handleUpdateTask = () => {
-    setChecked(checked => !checked)
+    setChecked((checked: boolean | undefined) => !checked)
     const id = taskId
     updateTask(id, !checked)
   }
 
-  const handleDeleteTask = id => {
+  const handleDeleteTask = (id: number | undefined) => {
     deleteTask(id)
     modals.closeAll()
   }
 
-  const openDeleteModal = id =>
+  const openDeleteModal = (id: number | undefined) =>
     modals.openConfirmModal({
       title: 'Delete this task',
       centered: true,
@@ -44,9 +44,9 @@ export default function TaskDetailsModal({ context, id }) {
 
   return (
     <>
-      <Flex align={'center'} gap={'sm'} sx={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: '1000' }}>
+      <Flex align={'center'} gap={'sm'} style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: '1000' }}>
         <Badge h={'.5rem'} w={'2rem'} variant="filled" radius="xl" color={getPriorityColor(priority)} />
-        <Text color={isExpired ? 'red' : null} size="sm">
+        <Text color={isExpired ? 'red' : undefined} size="sm">
           {getFormattedDeadline(deadline)}
         </Text>
       </Flex>

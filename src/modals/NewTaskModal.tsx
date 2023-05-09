@@ -1,11 +1,13 @@
+import React from 'react'
 // hooks
 import { useForm } from '@mantine/form'
 import { useData } from '../hooks/useData'
 // components
 import { Button, Box, TextInput, Textarea, Group, Space, Radio } from '@mantine/core'
 import { DateTimePicker } from '@mantine/dates'
+import { ContextModalProps } from '@mantine/modals'
 
-const NewTaskModal = ({ context, id }) => {
+const NewTaskModal = ({ context, id }: ContextModalProps) => {
   const { createTask } = useData()
   const form = useForm({
     initialValues: {
@@ -41,7 +43,7 @@ const NewTaskModal = ({ context, id }) => {
         withAsterisk
         minDate={new Date()}
         valueFormat="DD MMM YYYY hh:mm"
-        sx={{ position: 'relative', zIndex: '1000' }}
+        style={{ position: 'relative', zIndex: '1000' }}
         {...form.getInputProps('deadline')}
       />
       <Space h="md" />

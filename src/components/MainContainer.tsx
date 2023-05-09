@@ -1,3 +1,4 @@
+import React from 'react'
 import { modals } from '@mantine/modals'
 //hooks
 import { useData } from '../hooks/useData'
@@ -16,6 +17,7 @@ export default function MainContainer() {
       centered: true,
       title: 'Add a new task card',
       sx: { section: { overflow: 'inherit' } },
+      innerProps: {},
     })
   }
 

@@ -1,3 +1,4 @@
+import React from 'react'
 import { modals } from '@mantine/modals'
 // hooks
 import { useState } from 'react'
@@ -6,15 +7,21 @@ import { useData } from '../hooks/useData'
 import { Grid, Card, Flex, Box, Badge, Title, Text, Checkbox, CloseButton, Button } from '@mantine/core'
 // functions
 import { getPriorityColor, getFormattedTitle, getFormattedDeadline, getExpired } from '../utils/helpers'
+// types
+import { Data } from '../types/general'
 
-export default function TodoCard({ item }) {
+type TodoCardProps = {
+  item: Data
+}
+
+export default function TodoCard({ item }: TodoCardProps) {
   const { id, title, priority, isCompleted, deadline } = item
   const [checked, setChecked] = useState(isCompleted)
   const { setTaskId, updateTask, deleteTask } = useData()
   const isExpired = getExpired(deadline, isCompleted)
 
   const handleUpdateTask = () => {
-    setChecked(checked => !checked)
+    setChecked((checked: boolean | undefined) => !checked)
     updateTask(id, !checked)
   }
 
@@ -24,10 +31,11 @@ export default function TodoCard({ item }) {
       modal: 'taskDetailsModal',
       centered: true,
       sx: { section: { position: 'relative' } },
+      innerProps: {},
     })
   }
 
-  const openDeleteModal = id =>
+  const openDeleteModal = (id: number | undefined) =>
     modals.openConfirmModal({
       title: 'Delete this task',
       centered: true,
@@ -50,7 +58,7 @@ export default function TodoCard({ item }) {
         padding="lg"
         radius="md"
         withBorder
-        sx={isExpired ? { border: '1px solid red !important' } : null}
+        sx={isExpired ? { border: '1px solid red !important' } : undefined}
       >
         {priority && (
           <Badge
@@ -68,7 +76,7 @@ export default function TodoCard({ item }) {
           <Flex align={'center'} justify={'space-between'} w={'100%'}>
             <Box>
               <Title order={5}>{getFormattedTitle(title, 25)}</Title>
-              <Text color={isExpired ? 'red' : null}>{getFormattedDeadline(deadline)}</Text>
+              <Text color={isExpired ? 'red' : undefined}>{getFormattedDeadline(deadline)}</Text>
               <Button variant="subtle" onClick={openTaskDetailsModal}>
                 Open task details
               </Button>
