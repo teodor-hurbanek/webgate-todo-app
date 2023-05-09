@@ -1,8 +1,8 @@
-import React, { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from 'react'
+import React, {Dispatch, ReactNode, SetStateAction, createContext, useContext, useState} from 'react'
+// types
+import {Data, NewData} from '../types/general'
 // data
 import data from '../data'
-// types
-import { Data, NewData } from '../types/general'
 
 interface DataInterface {
   tasks: Data[]
@@ -30,7 +30,7 @@ export const useProvidedData = (): DataInterface => {
 
   const createTask = (data: NewData) => {
     const lastId = tasks.length ? Number([...tasks].pop()?.id) + 1 : 1
-    const newObj = { id: lastId, ...data, isCompleted: false }
+    const newObj = {id: lastId, ...data, isCompleted: false}
     setTasks([...tasks, newObj])
   }
 
@@ -48,12 +48,12 @@ export const useProvidedData = (): DataInterface => {
     const newTasks = tasks.filter(task => task.id !== id)
     setTasks(newTasks)
   }
-  return { tasks, taskId, setTaskId, setTasks, createTask, updateTask, deleteTask }
+  return {tasks, taskId, setTaskId, setTasks, createTask, updateTask, deleteTask}
 }
 
 export const useData = () => useContext(DataContext)
 
-export const DataProvider = ({ children }: { children: ReactNode }) => {
+export const DataProvider = ({children}: {children: ReactNode}) => {
   const tasks = useProvidedData()
   return <DataContext.Provider value={tasks}>{children}</DataContext.Provider>
 }

@@ -1,14 +1,15 @@
 import React from 'react'
 // hooks
-import { useForm } from '@mantine/form'
-import { useData } from '../hooks/useData'
+import {useForm} from '@mantine/form'
+import {useData} from '../hooks/useData'
 // components
-import { Button, Box, TextInput, Textarea, Group, Space, Radio } from '@mantine/core'
-import { DateTimePicker } from '@mantine/dates'
-import { ContextModalProps } from '@mantine/modals'
+import {Button, Box, TextInput, Textarea, Group, Space, Radio} from '@mantine/core'
+import {DateTimePicker} from '@mantine/dates'
+import {ContextModalProps} from '@mantine/modals'
+import {NewData} from '../types/general'
 
-const NewTaskModal = ({ context, id }: ContextModalProps) => {
-  const { createTask } = useData()
+const NewTaskModal = ({context, id}: ContextModalProps) => {
+  const {createTask} = useData()
   const form = useForm({
     initialValues: {
       title: '',
@@ -25,7 +26,7 @@ const NewTaskModal = ({ context, id }: ContextModalProps) => {
   })
 
   const handleSubmit = () => {
-    createTask(form.values)
+    createTask(form.values as NewData)
     context.closeModal(id)
     form.reset()
   }
@@ -43,7 +44,7 @@ const NewTaskModal = ({ context, id }: ContextModalProps) => {
         withAsterisk
         minDate={new Date()}
         valueFormat="DD MMM YYYY hh:mm"
-        style={{ position: 'relative', zIndex: '1000' }}
+        style={{position: 'relative', zIndex: '1000'}}
         {...form.getInputProps('deadline')}
       />
       <Space h="md" />
@@ -56,7 +57,7 @@ const NewTaskModal = ({ context, id }: ContextModalProps) => {
         </Group>
       </Radio.Group>
 
-      <Box sx={{ textAlign: 'right' }}>
+      <Box sx={{textAlign: 'right'}}>
         <Button mt="md" mr="md" variant="default" onClick={() => context.closeModal(id)}>
           Cancel
         </Button>

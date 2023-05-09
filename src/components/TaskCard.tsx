@@ -1,23 +1,23 @@
 import React from 'react'
-import { modals } from '@mantine/modals'
+import {modals} from '@mantine/modals'
 // hooks
-import { useState } from 'react'
-import { useData } from '../hooks/useData'
+import {useState} from 'react'
+import {useData} from '../hooks/useData'
 // components
-import { Grid, Card, Flex, Box, Badge, Title, Text, Checkbox, CloseButton, Button, Center, Space } from '@mantine/core'
+import {Grid, Card, Flex, Box, Badge, Title, Text, Checkbox, CloseButton, Button, Center, Space} from '@mantine/core'
 // functions
-import { getPriorityColor, getFormattedTitle, getFormattedDeadline, getExpired } from '../utils/helpers'
+import {getPriorityColor, getFormattedTitle, getFormattedDeadline, getExpired} from '../utils/helpers'
 // types
-import { Data } from '../types/general'
+import {Data} from '../types/general'
 
 type TaskCardProps = {
   item: Data
 }
 
-export default function TaskCard({ item }: TaskCardProps) {
-  const { id, title, priority, isCompleted, deadline } = item
+export default function TaskCard({item}: TaskCardProps) {
+  const {id, title, priority, isCompleted, deadline} = item
   const [checked, setChecked] = useState(isCompleted)
-  const { setTaskId, updateTask, deleteTask } = useData()
+  const {setTaskId, updateTask, deleteTask} = useData()
   const isExpired = getExpired(deadline, isCompleted)
 
   const handleUpdateTask = () => {
@@ -25,18 +25,17 @@ export default function TaskCard({ item }: TaskCardProps) {
     updateTask(id, !checked)
   }
 
-  // TODO: try to open with onCardClick instead of the buttun
   const openTaskDetailsModal = () => {
     setTaskId(id)
     modals.openContextModal({
       modal: 'taskDetailsModal',
       centered: true,
-      sx: { section: { position: 'relative' } },
+      sx: {section: {position: 'relative'}},
       innerProps: {},
     })
   }
 
-  const openDeleteModal = (id: number) =>
+  const openDeleteModal = (id: number) => {
     modals.openConfirmModal({
       title: 'Delete this task',
       centered: true,
@@ -46,11 +45,12 @@ export default function TaskCard({ item }: TaskCardProps) {
           back.
         </Text>
       ),
-      labels: { confirm: 'Delete task', cancel: 'Cancel' },
-      confirmProps: { color: 'red' },
+      labels: {confirm: 'Delete task', cancel: 'Cancel'},
+      confirmProps: {color: 'red'},
       onCancel: () => console.log('Canceled'),
       onConfirm: () => deleteTask(id),
     })
+  }
 
   return (
     <Grid.Col xs={6} md={4}>
@@ -59,7 +59,7 @@ export default function TaskCard({ item }: TaskCardProps) {
         padding="lg"
         radius="md"
         withBorder
-        sx={isExpired ? { border: '1px solid red !important' } : undefined}
+        sx={isExpired ? {border: '1px solid red !important'} : undefined}
       >
         {priority && (
           <Badge
@@ -68,11 +68,11 @@ export default function TaskCard({ item }: TaskCardProps) {
             variant="filled"
             radius="xl"
             color={getPriorityColor(priority)}
-            sx={{ position: 'absolute', top: '.5rem', left: '.5rem' }}
+            sx={{position: 'absolute', top: '.5rem', left: '.5rem'}}
           />
         )}
         <Flex align={'center'} gap={'1rem'}>
-          <Checkbox checked={checked} onChange={handleUpdateTask} sx={{ input: { cursor: 'pointer' } }} />
+          <Checkbox checked={checked} onChange={handleUpdateTask} sx={{input: {cursor: 'pointer'}}} />
 
           <Flex align={'center'} justify={'space-between'} w={'100%'}>
             <Box>
@@ -80,7 +80,13 @@ export default function TaskCard({ item }: TaskCardProps) {
               <Text color={isExpired ? 'red' : undefined}>{getFormattedDeadline(deadline)}</Text>
             </Box>
 
-            <CloseButton onClick={() => openDeleteModal(id)} title="Delete task card" size="md" iconSize={20} />
+            <CloseButton
+              onClick={() => openDeleteModal(id)}
+              title="Delete task card"
+              size="md"
+              iconSize={20}
+              className="target"
+            />
           </Flex>
         </Flex>
         <Space h="sm" />

@@ -1,19 +1,18 @@
 import React from 'react'
-import { ContextModalProps, modals } from '@mantine/modals'
+import {ContextModalProps, modals} from '@mantine/modals'
 //hooks
-import { useState } from 'react'
-import { useData } from '../hooks/useData'
+import {useState} from 'react'
+import {useData} from '../hooks/useData'
 // components
-import { Badge, Flex, Text, Title, Checkbox, Space, Box, Button } from '@mantine/core'
+import {Badge, Flex, Text, Title, Checkbox, Space, Box, Button} from '@mantine/core'
 // functions
-import { getPriorityColor, getFormattedDeadline, getExpired } from '../utils/helpers'
+import {getPriorityColor, getFormattedDeadline, getExpired} from '../utils/helpers'
 
-export default function TaskDetailsModal({ context, id }: ContextModalProps) {
-  const { tasks, taskId, updateTask, deleteTask } = useData()
+export default function TaskDetailsModal({context, id}: ContextModalProps) {
+  const {tasks, taskId, updateTask, deleteTask} = useData()
 
   const task = tasks.find(task => task.id === taskId)
-  // TODO: remove ! and provide better typing
-  const { title, description, deadline, priority, isCompleted } = task!
+  const {title, description, deadline, priority, isCompleted} = task!
   const [checked, setChecked] = useState(isCompleted)
   const isExpired = getExpired(deadline, isCompleted)
 
@@ -38,14 +37,14 @@ export default function TaskDetailsModal({ context, id }: ContextModalProps) {
           back.
         </Text>
       ),
-      labels: { confirm: 'Delete task', cancel: 'Back' },
-      confirmProps: { color: 'red' },
+      labels: {confirm: 'Delete task', cancel: 'Back'},
+      confirmProps: {color: 'red'},
       onConfirm: () => handleDeleteTask(id),
     })
 
   return (
     <>
-      <Flex align={'center'} gap={'sm'} style={{ position: 'absolute', top: '1rem', left: '1rem', zIndex: '1000' }}>
+      <Flex align={'center'} gap={'sm'} style={{position: 'absolute', top: '1rem', left: '1rem', zIndex: '1000'}}>
         <Badge h={'.5rem'} w={'2rem'} variant="filled" radius="xl" color={getPriorityColor(priority)} />
         <Text color={isExpired ? 'red' : undefined} size="sm">
           {getFormattedDeadline(deadline)}
@@ -60,9 +59,9 @@ export default function TaskDetailsModal({ context, id }: ContextModalProps) {
         checked={checked}
         onChange={handleUpdateTask}
         label="Select as completed"
-        sx={{ input: { cursor: 'pointer' } }}
+        sx={{input: {cursor: 'pointer'}}}
       />
-      <Box mt={'auto'} sx={{ textAlign: 'right' }}>
+      <Box mt={'auto'} sx={{textAlign: 'right'}}>
         <Button mt="md" mr="md" variant="default" onClick={() => context.closeModal(id)}>
           Cancel
         </Button>

@@ -13,6 +13,3 @@ export type NewData = {
   priority?: string
   deadline: string
 }
-
-// TODO: try to use Priority type
-export type Priority = 'high' | 'medium' | 'low'
