@@ -4,7 +4,7 @@ import {modals} from '@mantine/modals'
 import {useState} from 'react'
 import {useData} from '../hooks/useData'
 // components
-import {Grid, Card, Flex, Box, Badge, Title, Text, Checkbox, CloseButton, Button, Center, Space} from '@mantine/core'
+import {Grid, Card, Flex, Box, Badge, Title, Text, Checkbox, CloseButton} from '@mantine/core'
 // functions
 import {getPriorityColor, getFormattedTitle, getFormattedDeadline, getExpired} from '../utils/helpers'
 // types
@@ -35,7 +35,8 @@ export default function TaskCard({item}: TaskCardProps) {
     })
   }
 
-  const openDeleteModal = (id: number) => {
+  const openDeleteModal = (id: number, event: any) => {
+    event.stopPropagation()
     modals.openConfirmModal({
       title: 'Delete this task',
       centered: true,
@@ -59,7 +60,8 @@ export default function TaskCard({item}: TaskCardProps) {
         padding="lg"
         radius="md"
         withBorder
-        sx={isExpired ? {border: '1px solid red !important'} : undefined}
+        sx={isExpired ? {border: '1px solid red !important', cursor: 'pointer'} : {cursor: 'pointer'}}
+        onClick={openTaskDetailsModal}
       >
         {priority && (
           <Badge
@@ -72,7 +74,12 @@ export default function TaskCard({item}: TaskCardProps) {
           />
         )}
         <Flex align={'center'} gap={'1rem'}>
-          <Checkbox checked={checked} onChange={handleUpdateTask} sx={{input: {cursor: 'pointer'}}} />
+          <Checkbox
+            checked={checked}
+            onChange={handleUpdateTask}
+            onClick={event => event.stopPropagation()}
+            sx={{input: {cursor: 'pointer'}}}
+          />
 
           <Flex align={'center'} justify={'space-between'} w={'100%'}>
             <Box>
@@ -81,7 +88,7 @@ export default function TaskCard({item}: TaskCardProps) {
             </Box>
 
             <CloseButton
-              onClick={() => openDeleteModal(id)}
+              onClick={event => openDeleteModal(id, event)}
               title="Delete task card"
               size="md"
               iconSize={20}
@@ -89,12 +96,6 @@ export default function TaskCard({item}: TaskCardProps) {
             />
           </Flex>
         </Flex>
-        <Space h="sm" />
-        <Center>
-          <Button onClick={openTaskDetailsModal} variant="light">
-            Open task details
-          </Button>
-        </Center>
       </Card>
     </Grid.Col>
   )
