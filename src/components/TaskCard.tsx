@@ -16,9 +16,7 @@ type TaskCardProps = {
 
 export default function TaskCard({item}: TaskCardProps) {
   const {id, title, priority, isCompleted, deadline} = item
-  console.log({isCompleted})
   const [checked, setChecked] = useState(isCompleted)
-  console.log({checked})
   const {setTaskId, updateTask, deleteTask} = useData()
   const isExpired = getExpired(deadline, isCompleted)
 
