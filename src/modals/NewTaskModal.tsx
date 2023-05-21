@@ -10,6 +10,7 @@ import {NewData} from '../types/general'
 
 const NewTaskModal = ({context, id}: ContextModalProps) => {
   const {createTask} = useData()
+
   const form = useForm({
     initialValues: {
       title: '',

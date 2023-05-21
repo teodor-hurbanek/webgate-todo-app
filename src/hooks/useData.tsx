@@ -15,7 +15,7 @@ interface DataInterface {
 }
 
 const DataContext = createContext<DataInterface>({
-  tasks: data,
+  tasks: data as Data[],
   taskId: 0,
   setTasks: () => null,
   setTaskId: () => null,
@@ -25,7 +25,7 @@ const DataContext = createContext<DataInterface>({
 })
 
 export const useProvidedData = (): DataInterface => {
-  const [tasks, setTasks] = useState<Data[]>(data)
+  const [tasks, setTasks] = useState<Data[]>(data as Data[])
   const [taskId, setTaskId] = useState<number>(0)
 
   const createTask = (data: NewData) => {

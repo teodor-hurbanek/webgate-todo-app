@@ -16,7 +16,9 @@ type TaskCardProps = {
 
 export default function TaskCard({item}: TaskCardProps) {
   const {id, title, priority, isCompleted, deadline} = item
+  console.log({isCompleted})
   const [checked, setChecked] = useState(isCompleted)
+  console.log({checked})
   const {setTaskId, updateTask, deleteTask} = useData()
   const isExpired = getExpired(deadline, isCompleted)
 
@@ -35,7 +37,7 @@ export default function TaskCard({item}: TaskCardProps) {
     })
   }
 
-  const openDeleteModal = (id: number, event: any) => {
+  const openDeleteModal = (id: number, event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.stopPropagation()
     modals.openConfirmModal({
       title: 'Delete this task',
@@ -75,7 +77,7 @@ export default function TaskCard({item}: TaskCardProps) {
         )}
         <Flex align={'center'} gap={'1rem'}>
           <Checkbox
-            checked={checked}
+            checked={isCompleted}
             onChange={handleUpdateTask}
             onClick={event => event.stopPropagation()}
             sx={{input: {cursor: 'pointer'}}}
